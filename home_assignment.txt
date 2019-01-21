@@ -1,0 +1,61 @@
+Home Assignment
+
+The task is to write a simple webpage in Angular 5-6 / React that shows a list of movies - data is provided via an Ajax Request, that returns a JSON object.
+
+Note: not a real server is needed here, the ajax call will return JSON response from any api.
+
+Each movie will have:
+    1. “id” (Auto generated, please don’t ask the user to fill it out)
+    2. "Title": "Dog Day Afternoon",
+    3. "Year": "1975",
+    4. "Runtime": "125 min",
+    5. "Genre": "Biography, Crime, Drama",
+    6. "Director": "Sidney Lumet",
+
+When you enter the page, an AJAX request should fetch a list of movies from this link or any other open api you can find: http://www.omdbapi.com/
+
+The page will show all the movies resolved from the requests with a proper design – Nice design === High score.
+    1. The design should be responsive, use bootstrap / flexbox - should look good, please don’t use Tables/Grids of any kind.
+    2. Each movie can be edit, meaning that an edit button should be available to edit the movie fields, on each movie, the popup should contain the details of the movie (not a placeholder)
+    3. Edit button should open a modal (popup) with save and cancel buttons.
+    4. On Edit mode - All fields of the movie should be filled with values.
+    5. Proper validation should be included:
+        a. strings – not empty
+        b. date – valid date
+        Proper error message should be shown when trying to save the movie -
+        Please don’t use HTML5 validation
+    6. There should be an option to delete a movie with a popup message (cancel, ok) ok will delete the movie.
+    7. Prevent from the user to add / edit a movie with existing title, show error message that same movie name is already exist
+    8. Use filter / pipe to show each movie title : in the following format :
+        a. First letter of each word uppercase and each other letter should be lowercase,
+        b. also remove any non-English letters from the title. For example : A title with the name “@@THIS is a MoviE!!” should be presented as “This Is A Movie”
+    9. Please don’t use html validation but Angular / React validations.
+    10. Please add add new movie, button that will open the add new movie modal (popup).
+
+
+Please Note: None of this operations should be persistent (refreshing the page will clear the changes).
+
+
+ֿImportant notes
+    1. Please make it readable as possible, valid html and JavaScript files, meaning no remarks , using javascript standards ES6 is always a better option, Use Redux (React), NGRX / Store (Angular) if possible
+    2. Separate your code into files, not everything in one file.
+    3. Please make sure the code is clean and you didn’t leave unused files, or comments, in the project.
+    4. Id shouldn’t be editable
+    5. Please don’t use Window alert() / prompt() Method in the assignment
+
+
+How to use the API
+
+The api return only the movies names and ids, and you need to use different api to get the rest of the data, so you can choose:
+    1. call the first api with “a string” -> catch the results -> loop them and for each of them call the second api
+    2. OR - (no first api call) , just make an array of movies title (const) and for each of them call the second api
+
+
+How to submit the code
+
+    1. Upload to your github.com / bitbucket.com (make it public)
+    2. Upload to your server or use or use github pages / Heroku / any other solution - https://pages.github.com/ - This is mandatory, the person who is checking the ui, can’t run the code - he is not a developer.
+
+Send us the github repository link + link to a working task (2 Links)
+
+Good Luck
