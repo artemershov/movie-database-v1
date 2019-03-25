@@ -2,20 +2,15 @@ import React from 'react';
 import Button from 'reactstrap/lib/Button';
 import ButtonGroup from 'reactstrap/lib/ButtonGroup';
 
-export default class Pagination extends React.Component {
-  moveNext = () =>
-    this.props.change(
-      this.props.current + 1 > this.props.total
-        ? this.props.total
-        : this.props.current + 1
-    );
-  movePrev = () =>
-    this.props.change(this.props.current - 1 < 1 ? 1 : this.props.current - 1);
-  moveStart = () => this.props.change(1);
-  moveEnd = () => this.props.change(this.props.total);
-  moveTo = e => this.props.change(e.target.dataset.page);
-  buttonsArray = () => {
-    const { current, total, visible } = this.props;
+const Pagination = ({ className, change, current, total, visible }) => {
+  const moveNext = () => change(current + 1 > total ? total : current + 1);
+  const movePrev = () => change(current - 1 < 1 ? 1 : current - 1);
+  const moveStart = () => change(1);
+  const moveEnd = () => change(total);
+  const moveTo = e => change(e.target.dataset.page);
+  const style = { color: 'light', outline: true };
+  const buttonsArray = () => {
+    if (visible > total) visible = total;
     const middle = Math.floor(visible / 2);
     let offset = middle;
     if (current <= middle) offset = current - 1;
@@ -24,9 +19,9 @@ export default class Pagination extends React.Component {
       const page = current - offset + idx;
       return (
         <Button
-          color="light"
+          {...style}
           outline={page != current}
-          onClick={this.moveTo}
+          onClick={moveTo}
           data-page={page}
           key={idx}>
           {page}
@@ -34,23 +29,25 @@ export default class Pagination extends React.Component {
       );
     });
   };
-  render = () => (
-    <ButtonGroup className={this.props.className}>
-      <Button color="light" outline onClick={this.moveStart}>
+  return (
+    <ButtonGroup className={className}>
+      <Button {...style} onClick={moveStart}>
         &laquo;
       </Button>
-      <Button color="light" outline onClick={this.movePrev}>
+      <Button {...style} onClick={movePrev}>
         Previous
       </Button>
 
-      {this.buttonsArray()}
+      {buttonsArray()}
 
-      <Button color="light" outline onClick={this.moveNext}>
+      <Button {...style} onClick={moveNext}>
         Next
       </Button>
-      <Button color="light" outline onClick={this.moveEnd}>
+      <Button {...style} onClick={moveEnd}>
         &raquo;
       </Button>
     </ButtonGroup>
   );
-}
+};
+
+export default Pagination;
