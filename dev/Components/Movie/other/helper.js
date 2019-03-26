@@ -5,7 +5,7 @@ export const filterTitle = str =>
   startCase(
     str
       .toLowerCase()
-      .replace(/[^\d\w\s-]/, '')
+      .replace(/[^a-zA-Z\d\s-]/g, '')
       .replace(/\s+/g, ' ')
       .trim()
   );

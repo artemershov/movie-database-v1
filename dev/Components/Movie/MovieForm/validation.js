@@ -1,7 +1,7 @@
 import { filterTitle } from '../other/helper';
 
 // const titleRegExp = new RegExp(/^[\d\w\s-]+$/);
-const textRegExp = new RegExp(/^[\d\w\s!?;:,.'"`\-=+/\\()*#&%$]+$/);
+const textRegExp = new RegExp(/^[a-zA-Z\d\s!?;:,.'"`\-=+/\\()*#&%$]+$/);
 const numberRegExp = new RegExp(/^\d+$/);
 const floatRegExp = new RegExp(/^\d+([.,]\d+)?$/);
 const urlRegExp = new RegExp(
@@ -109,7 +109,7 @@ export default (values, props) => {
     const title = filterTitle(values.title);
     if (
       props.movies.some(movie => filterTitle(movie.title) == title) &&
-      !(props.data && props.data.title == title)
+      !(props.data && filterTitle(props.data.title) == title)
     ) {
       errors.title =
         'A movie with this title already exists. Choose another title.';
