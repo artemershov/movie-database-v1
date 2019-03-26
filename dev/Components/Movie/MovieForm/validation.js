@@ -1,7 +1,6 @@
-import find from 'lodash/find';
-import startCase from 'lodash/startCase';
+import { filterTitle } from '../other/helper';
 
-const titleRegExp = new RegExp(/^[\d\w\s-]+$/);
+// const titleRegExp = new RegExp(/^[\d\w\s-]+$/);
 const textRegExp = new RegExp(/^[\d\w\s!?;:,.'"`\-=+/\\()*#&%$]+$/);
 const numberRegExp = new RegExp(/^\d+$/);
 const floatRegExp = new RegExp(/^\d+([.,]\d+)?$/);
@@ -33,9 +32,9 @@ export default (values, props) => {
     }
   });
 
-  if (values.title && !titleRegExp.test(values.title)) {
-    errors.title = 'Only latin characters are allowed';
-  }
+  // if (values.title && !titleRegExp.test(values.title)) {
+  //   errors.title = 'Only latin characters are allowed';
+  // }
 
   const textFields = [
     'plot',
@@ -105,10 +104,11 @@ export default (values, props) => {
     errors.year = `Year must be between 1895 and ${new Date().getFullYear() +
       10}`;
   }
+
   if (values.title && props.movies) {
-    const title = startCase(values.title.replace(/\s+/g, ' ').trim());
+    const title = filterTitle(values.title);
     if (
-      find(props.movies, { title }) &&
+      props.movies.some(movie => filterTitle(movie.title) == title) &&
       !(props.data && props.data.title == title)
     ) {
       errors.title =

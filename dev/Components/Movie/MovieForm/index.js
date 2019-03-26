@@ -9,7 +9,6 @@ import Button from 'reactstrap/lib/Button';
 import Poster from '../Poster';
 import { Input } from './Input';
 import validate from './validation';
-import startCase from 'lodash/startCase';
 
 class MovieForm extends React.Component {
   submit = model => {
@@ -17,7 +16,6 @@ class MovieForm extends React.Component {
     Object.keys(model).forEach(key => {
       if (typeof model[key] == 'string') {
         model[key] = model[key].replace(/\s+/g, ' ').trim();
-        if (key == 'title') model[key] = startCase(model[key]);
       }
     });
     if (data) {

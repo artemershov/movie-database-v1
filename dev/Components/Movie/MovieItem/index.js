@@ -5,6 +5,7 @@ import actions from '../../../Redux/app';
 import Poster from '../Poster';
 import { MovieBody, MovieData } from './Styles';
 import Controls from './Controls';
+import { filterTitle } from '../other/helper';
 
 const MovieItem = ({ className, data, dispatch, isSearch }) => {
   const hover = () => dispatch(coverActions.set(data.poster));
@@ -17,12 +18,13 @@ const MovieItem = ({ className, data, dispatch, isSearch }) => {
     e.stopPropagation();
     dispatch(actions.remove(data.id));
   };
+  const title = filterTitle(data.title);
   return (
     <MovieBody className={className} onMouseEnter={hover} onClick={view}>
       <Poster src={data.poster} />
       <MovieData>
         <div>
-          <h3>{data.title}</h3>
+          <h3>{title}</h3>
           <div className="lead">{data.year}</div>
         </div>
         {!isSearch && <Controls color="light" edit={edit} remove={remove} />}
