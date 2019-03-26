@@ -105,9 +105,12 @@ export default (values, props) => {
     errors.year = `Year must be between 1895 and ${new Date().getFullYear() +
       10}`;
   }
-  if (values.title && props.data) {
+  if (values.title && props.movies) {
     const title = startCase(values.title.replace(/\s+/g, ' ').trim());
-    if (props.data.title !== title && find(props.movies, { title })) {
+    if (
+      find(props.movies, { title }) &&
+      !(props.data && props.data.title == title)
+    ) {
       errors.title =
         'A movie with this title already exists. Choose another title.';
     }
