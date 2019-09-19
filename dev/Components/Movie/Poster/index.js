@@ -3,27 +3,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilm } from '@fortawesome/free-solid-svg-icons/faFilm';
 import { PosterBody, PosterImg, PosterPlaceholder } from './Styles';
 
-const checkValidImage = src =>
-  new Promise(res => {
-    if (src) {
-      const img = document.createElement('img');
-      img.onload = () => res(src);
-      img.onerror = () => res(null);
-      img.src = src;
-    } else {
-      res(null);
-    }
-  });
-
 export default class Poster extends React.Component {
   state = { src: null };
-  mounted = null;
-  checkValidImage = src =>
-    checkValidImage(src).then(src => {
-      this.mounted && this.setState({ src });
-    });
+  rejectPromise = null;
+  checkValidImage = src => {
+    new Promise((res, rej) => {
+      this.rejectPromise = rej;
+      if (src) {
+        const img = new Image();
+        img.onload = () => res(src);
+        img.onerror = () => res(null);
+        img.src = src;
+      } else {
+        res(null);
+      }
+    }).then(src => this.setState({ src }), () => {});
+  };
   componentDidMount = () => {
-    this.mounted = true;
     this.checkValidImage(this.props.src);
   };
   componentDidUpdate = prevProps => {
@@ -31,7 +27,7 @@ export default class Poster extends React.Component {
       this.checkValidImage(this.props.src);
     }
   };
-  componentWillUnmount = () => (this.mounted = false);
+  componentWillUnmount = () => this.rejectPromise && this.rejectPromise();
   render = () => (
     <PosterBody className={this.props.className}>
       {this.state.src ? (

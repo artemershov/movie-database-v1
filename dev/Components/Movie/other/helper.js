@@ -1,6 +1,6 @@
 import startCase from 'lodash/startCase';
 
-export const filterTitle = str =>
+export const formatTitle = str =>
   str &&
   startCase(
     str

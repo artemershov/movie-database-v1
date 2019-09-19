@@ -1,7 +1,4 @@
-import compact from 'lodash/compact';
-import filter from 'lodash/filter';
 import pull from 'lodash/pull';
-import orderBy from 'lodash/orderBy';
 
 class SimpleList {
   constructor() {
@@ -62,22 +59,9 @@ class List extends SimpleList {
   remove(id) {
     return listRemove(this, id);
   }
-}
-
-export default class ExtendedList extends List {
-  constructor(data) {
-    super(data);
-  }
 
   getOrderedList() {
     return this.order.map(i => i && this.list[i]);
-  }
-
-  setOrderByParams(filterParam, sortParam, reverseParam) {
-    const filtered = filter(this.list, filterParam);
-    const sorted = orderBy(filtered, ...sortParam);
-    if (reverseParam) sorted.reverse();
-    this.order = sorted.map(i => i && i.id);
   }
 }
 
@@ -94,23 +78,4 @@ const listRemove = (list, id) => {
   return 1;
 };
 
-const listSort = (list, param, reverse = false) => {
-  list.order = compact(orderBy(list.list, ...param).map(i => i && i.id));
-  if (reverse) list.order.reverse();
-  return list.order;
-};
-
-const listFilter = (list, param) => {
-  list.order = filter(list.list, param).map(i => i && i.id);
-  return list.order;
-};
-
-export {
-  SimpleList,
-  List,
-  ExtendedList,
-  listAdd,
-  listRemove,
-  listSort,
-  listFilter,
-};
+export { SimpleList, List, listAdd, listRemove };
