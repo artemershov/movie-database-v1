@@ -9,16 +9,9 @@ import Poster from '../Poster';
 import Form from '../../Form';
 import Input from '../../Form/Input';
 import errorMessages from './validation';
-import startCase from 'lodash/startCase';
 
 class MovieForm extends React.Component {
   state = { valid: false };
-
-  // titleValidate = (values, value) => {
-  //   const title = value && startCase(value.replace(/\s+/g, ' ').trim());
-  //   if (this.props.data && this.props.data.title == title) return true;
-  //   return !this.props.actions.validateTitle(title);
-  // };
 
   posterInput = React.createRef();
   posterValue = () =>
@@ -32,7 +25,6 @@ class MovieForm extends React.Component {
     Object.keys(model).forEach(key => {
       if (typeof model[key] == 'string') {
         model[key] = model[key].replace(/\s+/g, ' ').trim();
-        if (key == 'title') model[key] = startCase(model[key]);
       }
     });
     if (data) {
@@ -46,7 +38,7 @@ class MovieForm extends React.Component {
   };
 
   render = () => {
-    const data = this.props.data;
+    const { data, list } = this.props;
     return (
       <Form
         submit={this.submit}
@@ -65,15 +57,13 @@ class MovieForm extends React.Component {
                   value={data && data.title}
                   label="Title"
                   validations={{
-                    isTitle: true,
                     notEmpty: true,
                     maxLength: 200,
-                    // isValidTitle: this.titleValidate,
+                    isValidTitle: { title: data && data.title, list },
                   }}
                   validationError={errorMessages.required}
                   validationErrors={{
-                    isTitle: errorMessages.isTitle,
-                    // isValidTitle: errorMessages.isValidTitle,
+                    isValidTitle: errorMessages.isValidTitle,
                     maxLength: errorMessages.length200,
                   }}
                   required
@@ -294,6 +284,7 @@ class MovieForm extends React.Component {
 }
 
 const mapState = state => ({
+  list: state.data.list,
   data: state.modal.form.data,
   movies: state.data.list,
   lastId: state.data.lastId

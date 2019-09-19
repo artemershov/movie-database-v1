@@ -8,6 +8,7 @@ import Controls from '../MovieItem/Controls';
 import Poster from '../Poster';
 import Rating from './Rating';
 import { Title, LeadText } from '../other/Styles';
+import { formatTitle } from '../other/helper';
 
 const formatRuntime = min =>
   min % 60
@@ -29,6 +30,7 @@ const MovieView = ({ data = null, edit, remove, isSearch }) => {
       Actors: data.actors,
       Awards: data.awards,
     };
+    const title = formatTitle(data.title);
     return (
       <Row>
         <Col xs="12" sm="4">
@@ -43,7 +45,7 @@ const MovieView = ({ data = null, edit, remove, isSearch }) => {
           )}
         </Col>
         <Col xs="12" sm="8">
-          <Title>{data.title}</Title>
+          <Title>{title}</Title>
           <LeadText className="my-2">
             <Rating className="text-warning mr-2" rating={data.imdbRating} />
             {data.imdbRating} / 10
