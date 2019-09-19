@@ -1,7 +1,7 @@
-import ExtendedList from './List';
+import { List } from './List';
 import merge from 'lodash/merge';
 
-export default class MovieList extends ExtendedList {
+export default class MovieList extends List {
   constructor(data) {
     super(data);
   }

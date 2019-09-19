@@ -27,7 +27,12 @@ const reducers = combineReducers({
   cover: coverReducer,
   loading: loadingReducer,
 });
-const middleware = applyMiddleware(thunk, logger);
-const store = createStore(reducers, initialState, middleware);
+const middlewares = [thunk];
+if (process.env.NODE_ENV === 'development') middlewares.push(logger);
+const store = createStore(
+  reducers,
+  initialState,
+  applyMiddleware(...middlewares)
+);
 
 export default store;

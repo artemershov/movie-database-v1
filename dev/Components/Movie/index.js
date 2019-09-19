@@ -49,7 +49,6 @@ class MovieContainer extends React.Component {
           {page &&
             page.map(el => (
               <Col xs="12" sm="6" md="4" lg="3" key={el.id || el.imdbID}>
-                {/* TODO: Remove Date.now key */}
                 <MovieItem className="mb-3" data={el} key={Date.now()} />
               </Col>
             ))}
