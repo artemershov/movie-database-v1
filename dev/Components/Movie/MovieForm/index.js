@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { actions as dataActions } from '../../../Redux/data';
+import actions from '../../../Redux/app';
 import { RowXS, RowSM } from '../../Layout/other/Row';
 import Col from 'reactstrap/lib/Col';
 import Button from 'reactstrap/lib/Button';
@@ -8,14 +11,14 @@ import Input from '../../Form/Input';
 import errorMessages from './validation';
 import startCase from 'lodash/startCase';
 
-export default class MovieForm extends React.Component {
+class MovieForm extends React.Component {
   state = { valid: false };
 
-  titleValidate = (values, value) => {
-    const title = value && startCase(value.replace(/\s+/g, ' ').trim());
-    if (this.props.data && this.props.data.title == title) return true;
-    return !this.props.actions.validateTitle(title);
-  };
+  // titleValidate = (values, value) => {
+  //   const title = value && startCase(value.replace(/\s+/g, ' ').trim());
+  //   if (this.props.data && this.props.data.title == title) return true;
+  //   return !this.props.actions.validateTitle(title);
+  // };
 
   posterInput = React.createRef();
   posterValue = () =>
@@ -25,13 +28,21 @@ export default class MovieForm extends React.Component {
   onInvalid = () => this.setState({ valid: false });
 
   submit = model => {
+    const { data, dispatch } = this.props;
     Object.keys(model).forEach(key => {
       if (typeof model[key] == 'string') {
         model[key] = model[key].replace(/\s+/g, ' ').trim();
         if (key == 'title') model[key] = startCase(model[key]);
       }
     });
-    this.props.actions.submit(model);
+    if (data) {
+      dispatch(dataActions.edit(data.id, model));
+      dispatch(actions.view({ id: data.id, ...model }));
+    } else {
+      dispatch(dataActions.add(model));
+      const id = this.props.lastId;
+      dispatch(actions.view({ id, ...model }));
+    }
   };
 
   render = () => {
@@ -57,12 +68,12 @@ export default class MovieForm extends React.Component {
                     isTitle: true,
                     notEmpty: true,
                     maxLength: 200,
-                    isValidTitle: this.titleValidate,
+                    // isValidTitle: this.titleValidate,
                   }}
                   validationError={errorMessages.required}
                   validationErrors={{
                     isTitle: errorMessages.isTitle,
-                    isValidTitle: errorMessages.isValidTitle,
+                    // isValidTitle: errorMessages.isValidTitle,
                     maxLength: errorMessages.length200,
                   }}
                   required
@@ -264,7 +275,7 @@ export default class MovieForm extends React.Component {
                 className="ml-2"
                 color="dark"
                 outline
-                onClick={this.props.actions.cancel}>
+                onClick={this.props.cancel}>
                 Cancel
               </Button>
               <Button
@@ -281,3 +292,10 @@ export default class MovieForm extends React.Component {
     );
   };
 }
+
+const mapState = state => ({
+  data: state.modal.form.data,
+  movies: state.data.list,
+  lastId: state.data.lastId
+});
+export default connect(mapState)(MovieForm);
