@@ -1,120 +1,35 @@
-import { filterTitle } from '../other/helper';
+import { addValidationRule } from 'formsy-react';
 
-// const titleRegExp = new RegExp(/^[\d\w\s-]+$/);
-const textRegExp = new RegExp(/^[a-zA-Z\d\s!?;:,.'"`\-=+/\\()*#&%$]+$/);
-const numberRegExp = new RegExp(/^\d+$/);
-const floatRegExp = new RegExp(/^\d+([.,]\d+)?$/);
-const urlRegExp = new RegExp(
-  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)/
-);
+addValidationRule('isTitle', (values, value) => {
+  const re = new RegExp(/[^\d\w\s-]/);
+  return !re.test(value);
+});
 
-export default (values, props) => {
-  const errors = {};
+addValidationRule('isText', (values, value) => {
+  const re = new RegExp(/[^\d\w\s!?;:,.'"`\-=+/\\()*#&%$]/);
+  return !re.test(value);
+});
 
-  const requiredFields = [
-    'title',
-    'poster',
-    'plot',
-    'imdbRating',
-    'year',
-    'runtime',
-    'genre',
-    'production',
-    'country',
-    'director',
-    'writer',
-    'actors',
-    'awards',
-  ];
-  requiredFields.forEach(name => {
-    if (!values[name]) {
-      errors[name] = 'The value is required';
-    }
-  });
+addValidationRule('notEmpty', (values, value) => {
+  return value && !!value.trim();
+});
 
-  // if (values.title && !titleRegExp.test(values.title)) {
-  //   errors.title = 'Only latin characters are allowed';
-  // }
+addValidationRule('numBetween', (values, value, array) => {
+  return value >= array[0] && value <= array[1];
+});
 
-  const textFields = [
-    'plot',
-    'genre',
-    'production',
-    'country',
-    'director',
-    'writer',
-    'actors',
-    'awards',
-  ];
-  textFields.forEach(name => {
-    if (values[name] && !textRegExp.test(values[name])) {
-      errors[name] =
-        'Only latin characters, numbers and punctuation marks are allowed';
-    }
-  });
-
-  const numericFields = ['runtime', 'year'];
-  numericFields.forEach(name => {
-    if (values[name] && !numberRegExp.test(values[name])) {
-      errors[name] = 'Only numeric values are allowed';
-    }
-  });
-
-  if (values.imdbRating && !floatRegExp.test(values.imdbRating)) {
-    errors.imdbRating = 'Only numeric values are allowed';
-  }
-
-  const maxLengthCheckFields = [
-    'title',
-    'genre',
-    'production',
-    'country',
-    'director',
-    'writer',
-    'actors',
-    'awards',
-  ];
-  maxLengthCheckFields.forEach(name => {
-    if (values[name] && values[name].trim().length > 200) {
-      errors[name] = 'Maximum length 200 characters';
-    }
-  });
-
-  if (values.plot && values.plot.trim().length > 2000) {
-    errors.plot = 'Maximum length 2000 characters';
-  }
-
-  if (values.poster && !urlRegExp.test(values.poster)) {
-    errors.poster = 'Value must be a valid URL';
-  }
-
-  if (values.imdbRating && (values.imdbRating < 0 || values.imdbRating > 10)) {
-    errors.imdbRating = 'Rating must be between 0 and 10';
-  }
-
-  if (values.runtime && (values.runtime < 1 || values.runtime > 600)) {
-    errors.runtime =
-      'Runtime should not exceed 10 hours and be at least 1 minute';
-  }
-
-  if (
-    values.year &&
-    (values.year < 1895 || values.year > new Date().getFullYear() + 10)
-  ) {
-    errors.year = `Year must be between 1895 and ${new Date().getFullYear() +
-      10}`;
-  }
-
-  if (values.title && props.movies) {
-    const title = filterTitle(values.title);
-    if (
-      props.movies.some(movie => filterTitle(movie.title) == title) &&
-      !(props.data && filterTitle(props.data.title) == title)
-    ) {
-      errors.title =
-        'A movie with this title already exists. Choose another title.';
-    }
-  }
-
-  return errors;
+const errorMessages = {
+  required: 'The value is required',
+  length200: 'Maximum length 200 characters',
+  length2000: 'Maximum length 2000 characters',
+  isTitle: 'Only latin characters are allowed',
+  isValidTitle: 'A movie with this title already exists. Choose another title.',
+  isText: 'Only latin characters, numbers and punctuation marks are allowed',
+  isUrl: 'Value must be a valid URL',
+  isNumeric: 'Only numeric values are allowed',
+  year: 'Year must be between 1895 and ' + (new Date().getFullYear() + 10),
+  rating: 'Rating must be between 0 and 10',
+  runtime: 'Runtime should not exceed 10 hours and be at least 1 minute',
 };
+
+export default errorMessages;

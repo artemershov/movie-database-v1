@@ -1,39 +1,37 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { actions as coverActions } from '../../../Redux/cover';
-import actions from '../../../Redux/app';
 import Poster from '../Poster';
 import { MovieBody, MovieData } from './Styles';
 import Controls from './Controls';
-import { filterTitle } from '../other/helper';
 
-const MovieItem = ({ className, data, dispatch, isSearch }) => {
-  const hover = () => dispatch(coverActions.set(data.poster));
-  const view = () => dispatch(actions.view(data, isSearch));
-  const edit = e => {
+export default class MovieItem extends React.Component {
+  view = () => this.props.actions.view(this.props.data);
+  edit = e => {
     e.stopPropagation();
-    dispatch(actions.edit(data));
+    this.props.actions.edit(this.props.data);
   };
-  const remove = e => {
+  remove = e => {
     e.stopPropagation();
-    dispatch(actions.remove(data.id));
+    this.props.actions.remove(this.props.data.id);
   };
-  const title = filterTitle(data.title);
-  return (
-    <MovieBody className={className} onMouseEnter={hover} onClick={view}>
-      <Poster src={data.poster} />
+
+  onMouseEnter = () => this.props.hover(this.props.data.poster);
+  onMouseLeave = () => this.props.hover(null);
+
+  render = () => (
+    <MovieBody
+      className={this.props.className}
+      onMouseEnter={this.onMouseEnter}
+      onClick={this.view}>
+      <Poster src={this.props.data.poster} />
       <MovieData>
         <div>
-          <h3>{title}</h3>
-          <div className="lead">{data.year}</div>
+          <h3>{this.props.data.title}</h3>
+          <div className="lead">{this.props.data.year}</div>
         </div>
-        {!isSearch && <Controls color="light" edit={edit} remove={remove} />}
+        {this.props.isEditable && (
+          <Controls color="light" edit={this.edit} remove={this.remove} />
+        )}
       </MovieData>
     </MovieBody>
   );
-};
-
-const mapState = state => ({
-  isSearch: Boolean(state.search.query),
-});
-export default connect(mapState)(MovieItem);
+}

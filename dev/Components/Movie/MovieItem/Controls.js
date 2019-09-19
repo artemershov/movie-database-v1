@@ -3,15 +3,15 @@ import Row from 'reactstrap/lib/Row';
 import Col from 'reactstrap/lib/Col';
 import Button from 'reactstrap/lib/Button';
 
-const Controls = ({ className, color, edit, remove }) => (
-  <Row className={className} noGutters>
+const Controls = props => (
+  <Row className={props.className} noGutters>
     <Col className="pr-2">
-      <Button color={color} outline block onClick={edit}>
+      <Button color={props.color} outline block onClick={props.edit}>
         Edit
       </Button>
     </Col>
     <Col className="pl-2">
-      <Button color={color} outline block onClick={remove}>
+      <Button color={props.color} outline block onClick={props.remove}>
         Remove
       </Button>
     </Col>

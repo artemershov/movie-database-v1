@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import { fillBlock, gradient } from './Styles';
 import React from 'react';
 import styled from 'styled-components';
@@ -23,12 +22,11 @@ const CoverImg = styled.div`
   transition: all 0.2s;
 `;
 
-const Cover = ({ src }) => (
+const Cover = props => (
   <CoverContainer>
-    <CoverImg style={src && { backgroundImage: `url(${src})` }} />
+    <CoverImg style={props.src && { backgroundImage: `url(${props.src})` }} />
     <CoverBG />
   </CoverContainer>
 );
 
-const mapState = state => ({ src: state.cover });
-export default connect(mapState)(Cover);
+export default Cover;

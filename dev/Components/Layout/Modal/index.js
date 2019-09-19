@@ -3,15 +3,15 @@ import { MovieModal, MovieModalHeader, MovieModalBody } from './Styles';
 
 const paddingFix = () => document.body.removeAttribute('style');
 
-const Modal = ({ open, toggle, title, children }) => (
+const Modal = props => (
   <MovieModal
-    isOpen={open}
-    toggle={toggle}
+    isOpen={props.open}
+    toggle={props.toggle}
     size="xl"
     onOpened={paddingFix}
     onClosed={paddingFix}>
-    <MovieModalHeader toggle={toggle}>{title}</MovieModalHeader>
-    <MovieModalBody>{children}</MovieModalBody>
+    <MovieModalHeader toggle={props.toggle}>{props.title}</MovieModalHeader>
+    <MovieModalBody>{props.children}</MovieModalBody>
   </MovieModal>
 );
 
