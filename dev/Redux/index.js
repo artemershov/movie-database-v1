@@ -1,5 +1,4 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
@@ -22,7 +21,6 @@ const initialState = {
 const reducers = combineReducers({
   data: dataReducer,
   search: searchReducer,
-  form: formReducer,
   modal: modalReducer,
   cover: coverReducer,
   loading: loadingReducer,
